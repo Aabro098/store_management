@@ -1,9 +1,7 @@
+# App currently uses the default Flutter launcher icons.
+# To generate custom icons later, set image_path and run:
+#   dart run flutter_launcher_icons
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/logos/app_logo.png"
-  min_sdk_android: 21
-  remove_alpha_ios: true
-  background_color_ios: "#FFFFFF"
-  adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/logos/app_logo.png"
+  # image_path: "assets/logos/app_logo.png"

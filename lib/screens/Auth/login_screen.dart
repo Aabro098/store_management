@@ -69,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: AppSizes.md),
                       Center(
                         child: Image.asset(
-                          AppImages.fincoLogo,
+                          AppImages.appLogo,
                           width: 200.w,
                         ),
                       ),

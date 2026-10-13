@@ -1,3 +1,3 @@
 class AppImages {
-  static const String fincoLogo = 'assets/logos/finco_logo.png';
+  static const String appLogo = 'assets/logos/app_logo.jpeg';
 }
