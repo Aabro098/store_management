@@ -1,0 +1,8 @@
+{
+    "appName": "Finco Customer",
+    "welcome": "Welcome to Finco Customer",
+
+    "password_required": "Password is required",
+    "password_length": "Password must be at least 8 characters long",
+    "length_error": "Password shouldn't be more than 16 characters long"
+}

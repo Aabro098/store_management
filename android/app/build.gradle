@@ -1,0 +1,130 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
+}
+
+def loadKeyProperties(String flavor) {
+    def properties = new Properties()
+    def file = rootProject.file("key-${flavor}.properties")
+    if (file.exists()) {
+        properties.load(new FileInputStream(file))
+    }
+    return properties
+}
+
+// Fail early with a clear message if a flavor's gitignored key file is missing
+// while actually building/releasing that flavor. Debug builds are unaffected.
+gradle.taskGraph.whenReady { taskGraph ->
+    taskGraph.allTasks.each { task ->
+        def name = task.name
+        def match = name =~ /(?i)(assemble|bundle|package|install|upload)\w*(Dev|Staging|Prod)(Release|Profile)/
+        if (match.find()) {
+            def flavor = match.group(2).toLowerCase()
+            if (!rootProject.file("key-${flavor}.properties").exists()) {
+                throw new GradleException(
+                        "android/key-${flavor}.properties is missing. It is gitignored, so restore it " +
+                                "(or regenerate it) before building the ${flavor} release."
+                )
+            }
+        }
+    }
+}
+
+android {
+    namespace = "com.finco.customer.app"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    signingConfigs {
+        dev {
+            def p = loadKeyProperties('dev')
+            if (p['storeFile'] != null) {
+                keyAlias p['keyAlias']
+                keyPassword p['keyPassword']
+                storeFile file(p['storeFile'])
+                storePassword p['storePassword']
+            }
+        }
+        staging {
+            def p = loadKeyProperties('staging')
+            if (p['storeFile'] != null) {
+                keyAlias p['keyAlias']
+                keyPassword p['keyPassword']
+                storeFile file(p['storeFile'])
+                storePassword p['storePassword']
+            }
+        }
+        prod {
+            def p = loadKeyProperties('prod')
+            if (p['storeFile'] != null) {
+                keyAlias p['keyAlias']
+                keyPassword p['keyPassword']
+                storeFile file(p['storeFile'])
+                storePassword p['storePassword']
+            }
+        }
+    }
+
+    defaultConfig {
+        applicationId = "com.finco.customer.app"
+        minSdk = flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+        multiDexEnabled true
+    }
+
+    flavorDimensions += "environment"
+    productFlavors {
+        dev {
+            dimension "environment"
+            applicationId "com.finco.customer.app.dev"
+            resValue "string", "app_name", "Finco Customer Dev"
+            signingConfig signingConfigs.dev
+        }
+        staging {
+            dimension "environment"
+            applicationId "com.finco.customer.app.staging"
+            resValue "string", "app_name", "Finco Customer Staging"
+            signingConfig signingConfigs.staging
+        }
+        prod {
+            dimension "environment"
+            applicationId "com.finco.customer.app"
+            resValue "string", "app_name", "Finco Customer"
+            signingConfig signingConfigs.prod
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+dependencies {
+    // For Java 8+ desugaring
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+}
+
+flutter {
+    source = "../.."
+}
