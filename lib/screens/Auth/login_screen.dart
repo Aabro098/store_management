@@ -4,7 +4,7 @@ import 'package:finco_customer/common/widgets/text_form_field.dart';
 import 'package:finco_customer/common/widgets/version_number.dart';
 import 'package:finco_customer/extensions/context_extensions.dart';
 import 'package:finco_customer/providers/auth_provider.dart';
-import 'package:finco_customer/screens/NavScreen/nav_screen.dart';
+import 'package:finco_customer/screens/Home/home_screen.dart';
 import 'package:finco_customer/services/dio_services.dart';
 import 'package:finco_customer/utils/Validators/validator.dart';
 import 'package:finco_customer/utils/constants/colors.dart';
@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: password,
       );
       await navigatorKey.currentState?.pushNamedAndRemoveUntil(
-        NavScreen.routeName,
+        HomeScreen.routeName,
         (route) => false,
       );
     } on DioException catch (e) {

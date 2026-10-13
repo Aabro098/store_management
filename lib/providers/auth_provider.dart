@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:finco_customer/controller/auth_controller.dart';
-import 'package:finco_customer/services/notification_service.dart';
 import 'package:finco_customer/utils/local_storage/user_prefs.dart';
 import 'package:flutter/material.dart';
 
@@ -26,21 +24,11 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> _shouldRegisterPushNotifications() async {
-    try {
-      return await NotificationService().isPushNotificationsEnabled();
-    } on Object {
-      return false;
-    }
-  }
-
   Future<void> restoreSession() async {
     final token = await getSecureToken();
 
     _isAuthenticated = token.isNotEmpty;
-    if (_isAuthenticated && await _shouldRegisterPushNotifications()) {
-      unawaited(NotificationService().registerFcmTokenWithBackend());
-    }
+    if (_isAuthenticated) {}
     _isSessionChecked = true;
     notifyListeners();
   }
@@ -60,17 +48,10 @@ class AuthProvider extends ChangeNotifier {
       if (response == null) {
         throw Exception('Login failed: No response from server');
       }
-      final responseData = response['data'] as Map<String, dynamic>;
-      final token = responseData['token'] as String?;
-      if (token == null || token.isEmpty) {
-        throw Exception('Login failed: Token missing');
+      final status = response['status'] as String?;
+      if (status == null || status.isEmpty) {
+        throw Exception('Login failed: Status missing');
       }
-      await storeSecureToken(token);
-
-      if (await _shouldRegisterPushNotifications()) {
-        unawaited(NotificationService().registerFcmTokenWithBackend());
-      }
-
       _isAuthenticated = true;
       notifyListeners();
     } on DioException {
@@ -82,72 +63,10 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> changePassword({
-    required String oldPassword,
-    required String newPassword,
-  }) async {
-    _setLoading(true);
-
-    try {
-      final response = await AuthController().changePassword(
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-      );
-
-      if (response == null) {
-        throw Exception('Change Password Failed: No response from server');
-      }
-
-      await reset();
-    } on DioException {
-      rethrow;
-    } catch (e) {
-      rethrow;
-    } finally {
-      _setLoading(false);
-    }
-  }
-
-  Future<void> logout() async {
-    try {
-      final response = await AuthController().logout();
-
-      if (response == null) {
-        throw Exception('Logout failed: No response from server');
-      }
-
-      await NotificationService().unregisterFcmTokenWithBackend();
-      await reset();
-    } on DioException {
-      rethrow;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> deactivateAccount({required String confirmName}) async {
-    try {
-      final response =
-          await AuthController().deactivateAccount(confirmName: confirmName);
-
-      if (response == null) {
-        throw Exception('Delete Account failed: No response from server');
-      }
-
-      await NotificationService().unregisterFcmTokenWithBackend();
-      await reset();
-    } on DioException {
-      rethrow;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   /// Clears the local session (prefs, controllers and auth state) without
   /// calling the server. Used on 401 / token-expiry handling to avoid a
   /// recursive logout request.
   Future<void> reset() async {
-    await NotificationService().unregisterFcmTokenWithBackend();
     await clearPrefs();
     _isLoading = false;
     _isAuthenticated = false;

@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:finco_customer/config/flavor_config.dart';
 import 'package:finco_customer/providers/auth_provider.dart';
 import 'package:finco_customer/screens/Auth/login_screen.dart';
-import 'package:finco_customer/services/notification_service.dart';
 import 'package:finco_customer/utils/helpers/app_globals.dart';
 import 'package:finco_customer/utils/helpers/provider_reset.dart';
 import 'package:finco_customer/utils/local_storage/user_prefs.dart';
@@ -219,7 +218,6 @@ class AuthInterceptor extends Interceptor {
         resetSessionProviders(context);
         await authProvider.reset();
       } else {
-        await NotificationService().unregisterFcmTokenWithBackend();
         await clearPrefs();
       }
 

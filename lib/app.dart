@@ -6,7 +6,7 @@ import 'package:finco_customer/providers/localization_provider.dart';
 import 'package:finco_customer/providers/theme.provider.dart';
 import 'package:finco_customer/routes/app_routes.dart';
 import 'package:finco_customer/screens/Auth/login_screen.dart';
-import 'package:finco_customer/screens/NavScreen/nav_screen.dart';
+import 'package:finco_customer/screens/Home/home_screen.dart';
 import 'package:finco_customer/utils/helpers/app_globals.dart';
 import 'package:finco_customer/utils/helpers/localization_manager.dart';
 import 'package:finco_customer/utils/theme/theme.dart';
@@ -95,7 +95,7 @@ class _AppState extends State<App> {
     }
 
     if (authProvider.isAuthenticated) {
-      return const NavScreen();
+      return const HomeScreen();
     }
 
     return const LoginScreen();
