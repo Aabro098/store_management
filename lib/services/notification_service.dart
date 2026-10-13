@@ -24,7 +24,7 @@ class NotificationService {
       AndroidNotificationChannel(
     'finco_push',
     'Push Notifications',
-    description: 'Finco customer push notifications',
+    description: 'Sushmita Electronics push notifications',
     importance: Importance.max,
   );
 

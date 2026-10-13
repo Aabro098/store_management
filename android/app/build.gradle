@@ -81,19 +81,19 @@ android {
         dev {
             dimension "environment"
             applicationId "com.finco.customer.app.dev"
-            resValue "string", "app_name", "Finco Customer Dev"
+            resValue "string", "app_name", "Sushmita Electronics Dev"
             signingConfig signingConfigs.dev
         }
         staging {
             dimension "environment"
             applicationId "com.finco.customer.app.staging"
-            resValue "string", "app_name", "Finco Customer Staging"
+            resValue "string", "app_name", "Sushmita Electronics Staging"
             signingConfig signingConfigs.staging
         }
         prod {
             dimension "environment"
             applicationId "com.finco.customer.app"
-            resValue "string", "app_name", "Finco Customer"
+            resValue "string", "app_name", "Sushmita Electronics"
             signingConfig signingConfigs.prod
         }
     }

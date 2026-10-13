@@ -5,7 +5,7 @@ import 'package:finco_customer/utils/constants/api_constants.dart';
 Future<void> main() async {
   FlavorConfig.initialize(
     flavor: Flavor.dev,
-    appName: 'Finco Customer Dev',
+    appName: 'Sushmita Electronics Dev',
     baseUrl: UrlStrings.baseUrlDev,
   );
   await bootstrap();
