@@ -33,7 +33,7 @@ gradle.taskGraph.whenReady { taskGraph ->
 }
 
 android {
-    namespace = "com.finco.customer.app"
+    namespace = "com.sushmita.electronics.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -68,7 +68,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.finco.customer.app"
+        applicationId = "com.sushmita.electronics.app"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -80,19 +80,19 @@ android {
     productFlavors {
         dev {
             dimension "environment"
-            applicationId "com.finco.customer.app.dev"
+            applicationId "com.sushmita.electronics.app.dev"
             resValue "string", "app_name", "Sushmita Electronics Dev"
             signingConfig signingConfigs.dev
         }
         staging {
             dimension "environment"
-            applicationId "com.finco.customer.app.staging"
+            applicationId "com.sushmita.electronics.app.staging"
             resValue "string", "app_name", "Sushmita Electronics Staging"
             signingConfig signingConfigs.staging
         }
         prod {
             dimension "environment"
-            applicationId "com.finco.customer.app"
+            applicationId "com.sushmita.electronics.app"
             resValue "string", "app_name", "Sushmita Electronics"
             signingConfig signingConfigs.prod
         }
